@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../api/api";
 import { login, selectAuthLoading } from "../slices/authSlice";
-import * as siwe from "siwe";
+import * as siwe from "siwe"; // npm install siwe@2.1.4
 
 const Login = () => {
   const dispatch = useDispatch();
