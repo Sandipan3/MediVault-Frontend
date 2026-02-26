@@ -11,21 +11,20 @@ const initialState = {
 
 export const login = createAsyncThunk(
   "auth/login",
-  async ({ walletAddress, signature }, { rejectWithValue }) => {
+  async ({ message, signature }, { rejectWithValue }) => {
     try {
       const response = await api.post("auth/login", {
-        walletAddress,
+        message,
         signature,
       });
 
-      // backend returns: { status, data: { token, user }, message }
       return response.data.data;
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || "Login failed. Try again."
+        error.response?.data?.message || "Login failed. Try again.",
       );
     }
-  }
+  },
 );
 
 const authSlice = createSlice({

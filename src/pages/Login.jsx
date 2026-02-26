@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../api/api";
 import { login, selectAuthLoading } from "../slices/authSlice";
+import * as siwe from "siwe";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -17,42 +18,61 @@ const Login = () => {
     try {
       if (!window.ethereum) {
         toast.error("Please install MetaMask!");
-        //later
-        //window.location.href="https://metamask.app.link/dapp/hackoasis-frontend.netlify.app";
         return;
       }
 
-      // Request wallet connection
-      const [walletAddress] = await window.ethereum.request({
+      const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
 
-      if (!walletAddress) {
+      if (!accounts || accounts.length === 0) {
         toast.error("MetaMask wallet not connected!");
         return;
       }
 
-      // Get nonce from backend
-      const { data } = await api.post("auth/nonce", { walletAddress });
-      const nonce = data?.nonce;
+      const rawAddress = accounts[0];
+      const checksumAddress = ethers.getAddress(rawAddress);
+      const lowercaseAddress = rawAddress.toLowerCase();
+
+      const { data } = await api.post("auth/nonce", {
+        walletAddress: lowercaseAddress,
+      });
+
+      const { nonce, domain, uri, chainId } = data;
+
       if (!nonce) {
         toast.error("Nonce not received from server!");
         return;
       }
 
-      // Sign message using MetaMask
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
-      const signature = await signer.signMessage(`Sign this nonce: ${nonce}`);
 
-      // Dispatch login thunk
-      const result = await dispatch(login({ walletAddress, signature }));
+      const siweMessage = new siwe.SiweMessage({
+        domain,
+        address: checksumAddress,
+        statement: "Sign in to MediVault",
+        uri,
+        version: "1",
+        chainId: Number(chainId),
+        nonce,
+        issuedAt: new Date().toISOString(),
+      });
+
+      const messageToSign = siweMessage.prepareMessage();
+      const signature = await signer.signMessage(messageToSign);
+
+      const result = await dispatch(
+        login({
+          message: messageToSign,
+          signature,
+        }),
+      );
 
       if (login.fulfilled.match(result)) {
         const user = result.payload.user;
         toast.success(`Welcome ${user.name}!`);
 
-        // Redirect based on role
         if (user.role === "admin") navigate("/a");
         else if (user.role === "doctor") navigate("/d");
         else navigate("/p");
@@ -61,6 +81,7 @@ const Login = () => {
       }
     } catch (err) {
       console.error("Login Error:", err);
+
       if (err.code === 4001) {
         toast.error("Signature request rejected.");
       } else {
