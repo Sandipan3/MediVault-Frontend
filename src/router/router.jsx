@@ -13,6 +13,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <LandingPage />,
     children: [
       // Public Routes
       { path: "/login", element: <Login /> },

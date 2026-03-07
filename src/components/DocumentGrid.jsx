@@ -1,11 +1,12 @@
 import React from "react";
 
-const DocumentGrid = ({ docs, onDelete }) => {
+const DocumentGrid = ({ docs, onDelete, onProve }) => {
   if (!docs.length) return null;
 
   return (
     <div>
       <h3 className="text-xl font-bold mb-4">Documents</h3>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {docs.map((doc) => (
           <div
@@ -28,7 +29,7 @@ const DocumentGrid = ({ docs, onDelete }) => {
               {doc.filename}
             </p>
 
-            <div className="flex gap-2 mt-2">
+            <div className="flex gap-2 mt-2 flex-wrap justify-center">
               <button
                 onClick={() =>
                   window.open(`http://127.0.0.1:8080/ipfs/${doc.cid}`, "_blank")
@@ -37,12 +38,22 @@ const DocumentGrid = ({ docs, onDelete }) => {
               >
                 View
               </button>
+
               {onDelete && (
                 <button
                   onClick={() => onDelete(doc._id)}
                   className="bg-red-600 text-white text-sm px-3 py-1 rounded"
                 >
                   Delete
+                </button>
+              )}
+
+              {onProve && (
+                <button
+                  onClick={() => onProve(doc)}
+                  className="bg-purple-600 text-white text-sm px-3 py-1 rounded"
+                >
+                  Prove Ownership
                 </button>
               )}
             </div>

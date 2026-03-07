@@ -23,14 +23,20 @@ const AddReport = ({ onUploadSuccess }) => {
 
     try {
       setUploading(true);
+
       const { data } = await api.post("document/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
+      const { cid, secret } = data.data;
+
+      // store secret locally
+      localStorage.setItem(`secret_${cid}`, secret);
+
       toast.success(`Uploaded: ${data.data.filename}`);
+
       setFile(null);
 
-      // Notify parent to refresh documents
       if (onUploadSuccess) onUploadSuccess();
     } catch (error) {
       console.error(error);
@@ -43,6 +49,7 @@ const AddReport = ({ onUploadSuccess }) => {
   return (
     <div className="p-8 max-w-md mx-auto bg-white rounded-lg shadow-md">
       <h2 className="text-xl font-bold mb-4 text-center">Upload Report</h2>
+
       <form onSubmit={handleUpload} className="flex flex-col gap-4">
         <input
           type="file"
