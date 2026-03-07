@@ -51,8 +51,9 @@ const DoctorDashboard = () => {
         setPatientInfo(null);
         toast.error("Access expired or not granted");
       }
-    } catch {
-      toast.error("Error checking access");
+    } catch (error) {
+      console.error(error.message);
+      toast.error(error.message);
     } finally {
       setChecking(false);
     }
