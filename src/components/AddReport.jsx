@@ -13,8 +13,7 @@ const AddReport = ({ onUploadSuccess }) => {
     e.preventDefault();
 
     if (!file) return toast.error("Please select a file first!");
-    if (!user || !user._id)
-      return toast.error("User not found. Please log in again.");
+    if (!user || !user._id) return toast.error("User not found.");
 
     const formData = new FormData();
     formData.append("file", file);
@@ -30,16 +29,13 @@ const AddReport = ({ onUploadSuccess }) => {
 
       const { cid, secret } = data.data;
 
-      // store secret locally
       localStorage.setItem(`secret_${cid}`, secret);
 
       toast.success(`Uploaded: ${data.data.filename}`);
-
       setFile(null);
 
       if (onUploadSuccess) onUploadSuccess();
-    } catch (error) {
-      console.error(error);
+    } catch {
       toast.error("Upload failed");
     } finally {
       setUploading(false);
@@ -47,24 +43,26 @@ const AddReport = ({ onUploadSuccess }) => {
   };
 
   return (
-    <div className="p-8 max-w-md mx-auto bg-white rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4 text-center">Upload Report</h2>
+    <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-6 max-w-md mx-auto shadow-xl">
+      <h2 className="text-xl font-semibold mb-4 text-blue-300">
+        Upload Report
+      </h2>
 
       <form onSubmit={handleUpload} className="flex flex-col gap-4">
         <input
           type="file"
           accept="image/*,application/pdf"
           onChange={(e) => setFile(e.target.files[0])}
-          className="border p-2 rounded"
+          className="border border-blue-400/30 rounded-lg p-2 bg-transparent text-white"
         />
 
         <button
           disabled={!file || uploading}
           type="submit"
-          className={`p-2 rounded text-white transition ${
+          className={`rounded-lg py-2 text-white transition ${
             uploading || !file
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700"
+              ? "bg-gray-500"
+              : "bg-gradient-to-r from-blue-500 to-cyan-400 shadow-lg shadow-blue-500/30 hover:scale-105"
           }`}
         >
           {uploading ? "Uploading..." : "Upload"}

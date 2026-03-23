@@ -6,18 +6,19 @@ const DoctorAccessSection = ({
   onCheckAccess,
   checking,
 }) => (
-  <div className="flex flex-col sm:flex-row items-center gap-3 mb-6">
+  <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col sm:flex-row gap-3">
     <input
       type="text"
       placeholder="Enter Patient Wallet Address"
       value={patientAddress}
       onChange={(e) => setPatientAddress(e.target.value)}
-      className="border border-gray-300 px-3 py-2 rounded-lg w-full sm:w-96 focus:ring-2 focus:ring-blue-500 outline-none"
+      className="flex-1 bg-transparent border border-blue-400/30 rounded-lg px-4 py-2 text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
     />
+
     <button
       disabled={checking}
       onClick={onCheckAccess}
-      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg disabled:opacity-60 transition"
+      className="bg-gradient-to-r from-blue-500 to-cyan-400 hover:scale-105 transition text-white px-5 py-2 rounded-lg shadow-lg shadow-blue-500/30 disabled:opacity-50"
     >
       {checking ? "Checking..." : "Check Access"}
     </button>

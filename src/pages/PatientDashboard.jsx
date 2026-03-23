@@ -177,59 +177,69 @@ const PatientDashboard = () => {
   };
 
   return (
-    <div className="p-6 flex flex-col gap-6">
-      <DashboardHeader name={user?.name} onLogout={() => dispatch(logout())} />
-
-      <WalletDisplay wallet={user?.walletAddress} />
-
-      <p className="font-medium">Total Documents: {docs.length}</p>
-
-      <PatientAccessSection
-        doctorAddress={doctorAddress}
-        setDoctorAddress={setDoctorAddress}
-        onGrantAccess={handleGrantAccess}
-        granting={granting}
-      />
-
-      {grantedDoctor && (
-        <AccessStatusCard
-          doctorName={doctorName}
-          doctorAddress={grantedDoctor}
-          onRevoke={handleRevokeAccess}
-          revoking={revoking}
+    <div className="max-w-7xl mx-auto flex flex-col gap-6">
+      <div className="max-w-7xl mx-auto flex flex-col gap-6">
+        <DashboardHeader
+          name={user?.name}
+          onLogout={() => dispatch(logout())}
         />
-      )}
 
-      {!showAddReport ? (
-        <button
-          onClick={() => setShowAddReport(true)}
-          className="bg-green-600 text-white px-4 py-2 rounded w-fit"
-        >
-          + Add Report
-        </button>
-      ) : (
-        <div className="border rounded-lg p-4 bg-gray-50 relative">
-          <button
-            onClick={() => setShowAddReport(false)}
-            className="absolute top-2 right-2 text-red-600 font-bold"
-          >
-            ✕
-          </button>
+        <WalletDisplay wallet={user?.walletAddress} />
 
-          <AddReport
-            onUploadSuccess={() => {
-              fetchDocs();
-              setShowAddReport(false);
-            }}
-          />
+        <div className="backdrop-blur-xl bg-white/5 border border-white/10 p-4 rounded-2xl">
+          <p className="text-gray-300">
+            Total Documents:{" "}
+            <span className="text-blue-400 font-semibold">{docs.length}</span>
+          </p>
         </div>
-      )}
 
-      <DocumentGrid
-        docs={docs}
-        onDelete={handleDelete}
-        onProve={handleProveOwnership}
-      />
+        <PatientAccessSection
+          doctorAddress={doctorAddress}
+          setDoctorAddress={setDoctorAddress}
+          onGrantAccess={handleGrantAccess}
+          granting={granting}
+        />
+
+        {grantedDoctor && (
+          <AccessStatusCard
+            doctorName={doctorName}
+            doctorAddress={grantedDoctor}
+            onRevoke={handleRevokeAccess}
+            revoking={revoking}
+          />
+        )}
+
+        {!showAddReport ? (
+          <button
+            onClick={() => setShowAddReport(true)}
+            className="bg-gradient-to-r from-blue-500 to-cyan-400 px-5 py-2 rounded-lg w-fit shadow-lg shadow-blue-500/30 hover:scale-105 transition"
+          >
+            + Add Report
+          </button>
+        ) : (
+          <div className="relative">
+            <button
+              onClick={() => setShowAddReport(false)}
+              className="absolute right-2 top-2 text-red-400 text-lg"
+            >
+              ✕
+            </button>
+
+            <AddReport
+              onUploadSuccess={() => {
+                fetchDocs();
+                setShowAddReport(false);
+              }}
+            />
+          </div>
+        )}
+
+        <DocumentGrid
+          docs={docs}
+          onDelete={handleDelete}
+          onProve={handleProveOwnership}
+        />
+      </div>
     </div>
   );
 };

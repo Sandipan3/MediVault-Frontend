@@ -91,16 +91,35 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen gap-4">
-      <h1 className="text-3xl font-semibold">Login</h1>
-      <button
-        onClick={handleLogin}
-        disabled={loading}
-        className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition disabled:opacity-60"
-      >
-        {loading ? "Connecting..." : "Login with MetaMask"}
-      </button>
-    </div>
+    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#020617] via-[#020617] to-[#0f172a] text-white overflow-hidden">
+      {/*  Glow Background */}
+      <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] bg-blue-500 opacity-20 blur-3xl rounded-full"></div>
+      <div className="absolute bottom-[-100px] right-[-100px] w-[300px] h-[300px] bg-cyan-400 opacity-20 blur-3xl rounded-full"></div>
+
+      {/*  Card */}
+      <div className="relative z-10 backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-8 w-full max-w-md shadow-xl text-center">
+        <h1 className="text-3xl font-bold mb-3 text-blue-300">
+          Welcome to MediVault
+        </h1>
+
+        <p className="text-gray-400 mb-6">
+          Secure login using your wallet. No passwords. No compromises.
+        </p>
+
+        <button
+          onClick={handleLogin}
+          disabled={loading}
+          className="w-full py-3 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg text-white font-semibold shadow-lg shadow-blue-500/30 hover:scale-105 transition disabled:opacity-50"
+        >
+          {loading ? "Connecting..." : "Login with MetaMask"}
+        </button>
+
+        {/*  Trust note */}
+        <p className="text-gray-500 text-sm mt-6">
+          Powered by Ethereum • SIWE Authentication
+        </p>
+      </div>
+    </section>
   );
 };
 

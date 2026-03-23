@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Login from "../pages/Login";
 import React from "react";
-import Register from "../pages/Register";
+import Register from "../components/RegisterForm";
 import AdminLayout from "./AdminLayout";
 import DoctorLayout from "./DoctorLayout";
 import PatientLayout from "./PatientLayout";
@@ -10,14 +10,22 @@ import DoctorDashboard from "../pages/DoctorDashboard";
 import PatientDashboard from "../pages/PatientDashboard";
 import ProtectedRoute from "../components/ProtectedRoute";
 
+import LandingPage from "../pages/LandingPage";
+import RegisterPatient from "../pages/RegisterPatient";
+import RegisterDoctor from "../pages/RegisterDoctor";
+
 const router = createBrowserRouter([
   {
     path: "/",
 
     children: [
       // Public Routes
+      { index: true, element: <LandingPage /> },
       { path: "/login", element: <Login /> },
-      { path: "/register", element: <Register /> },
+
+      { path: "/register/patient", element: <RegisterPatient /> },
+      { path: "/register/doctor", element: <RegisterDoctor /> },
+
       {
         path: "/unauthorized",
         element: (

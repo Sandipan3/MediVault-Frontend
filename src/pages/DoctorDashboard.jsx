@@ -60,18 +60,22 @@ const DoctorDashboard = () => {
   };
 
   return (
-    <div className="p-6 sm:p-8 max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto flex flex-col gap-6">
       <DashboardHeader name={user?.name} onLogout={() => dispatch(logout())} />
+
       <WalletDisplay wallet={user?.walletAddress} />
+
       <DoctorAccessSection
         patientAddress={patientAddress}
         setPatientAddress={setPatientAddress}
         onCheckAccess={handleCheckAccess}
         checking={checking}
       />
+
       {hasAccess && patientInfo && (
         <PatientDetailsCard patientInfo={patientInfo} docCount={docs.length} />
       )}
+
       {hasAccess && <DocumentGrid docs={docs} />}
     </div>
   );
