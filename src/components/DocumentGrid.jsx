@@ -58,7 +58,7 @@ const DocumentGrid = ({ docs = [], onDelete = null, onProve = null }) => {
                 {/* Delete → only if provided */}
                 {onDelete && (
                   <button
-                    onClick={() => onDelete(doc._id)}
+                    onClick={() => onDelete(doc)}
                     className="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded"
                   >
                     Delete

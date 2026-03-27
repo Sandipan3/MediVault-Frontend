@@ -98,9 +98,12 @@ const PatientDashboard = () => {
     }
   };
 
-  const handleDelete = async (docId) => {
+  const handleDelete = async (doc) => {
     try {
-      await api.delete(`document/${docId}`);
+      await api.delete(`document/${doc._id}`);
+
+      // remove secret from localStorage
+      localStorage.removeItem(`secret_${doc.cid}`);
 
       toast.success("Document deleted");
 
