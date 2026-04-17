@@ -32,10 +32,10 @@ const Login = () => {
 
       const rawAddress = accounts[0];
       const checksumAddress = ethers.getAddress(rawAddress);
-      const lowercaseAddress = rawAddress.toLowerCase();
+      // const lowercaseAddress = rawAddress.toLowerCase();
 
       const { data } = await api.post("auth/nonce", {
-        walletAddress: lowercaseAddress,
+        walletAddress: checksumAddress,
       });
 
       const { nonce, domain, uri, chainId } = data;
