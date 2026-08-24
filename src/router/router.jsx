@@ -1,38 +1,49 @@
 import { createBrowserRouter } from "react-router-dom";
-import Login from "../pages/Login";
 import React from "react";
-import Register from "../components/RegisterForm";
-import AdminLayout from "./AdminLayout";
-import DoctorLayout from "./DoctorLayout";
-import PatientLayout from "./PatientLayout";
-import AdminDashboard from "../pages/AdminDashboard";
-import DoctorDashboard from "../pages/DoctorDashboard";
-import PatientDashboard from "../pages/PatientDashboard";
-import ProtectedRoute from "../components/ProtectedRoute";
+import BlueSpinner from "../components/BlueSpinner";
 
-import LandingPage from "../pages/LandingPage";
-import RegisterPatient from "../pages/RegisterPatient";
-import RegisterDoctor from "../pages/RegisterDoctor";
+// ----- LAZY LOAD EVERYTHING ELSE -----
+// Layouts
+const AdminLayout = React.lazy(() => import("./AdminLayout"));
+const DoctorLayout = React.lazy(() => import("./DoctorLayout"));
+const PatientLayout = React.lazy(() => import("./PatientLayout"));
+
+// Protected Route Wrapper
+const ProtectedRoute = React.lazy(() => import("../components/ProtectedRoute"));
+
+// Pages
+const LandingPage = React.lazy(() => import("../pages/LandingPage"));
+const Login = React.lazy(() => import("../pages/Login"));
+const RegisterPatient = React.lazy(() => import("../pages/RegisterPatient"));
+const RegisterDoctor = React.lazy(() => import("../pages/RegisterDoctor"));
+const AdminDashboard = React.lazy(() => import("../pages/AdminDashboard"));
+const DoctorDashboard = React.lazy(() => import("../pages/DoctorDashboard"));
+const PatientDashboard = React.lazy(() => import("../pages/PatientDashboard"));
+
+// Small static components
+const Unauthorized = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    unauthorized
+  </div>
+);
+const NotFound = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    404 - Page not found!
+  </div>
+);
 
 const router = createBrowserRouter([
   {
     path: "/",
-
     children: [
       // Public Routes
       { index: true, element: <LandingPage /> },
       { path: "/login", element: <Login /> },
-
       { path: "/register/patient", element: <RegisterPatient /> },
       { path: "/register/doctor", element: <RegisterDoctor /> },
-
       {
         path: "/unauthorized",
-        element: (
-          <div className="min-h-screen flex items-center justify-center">
-            unauthorized
-          </div>
-        ),
+        element: <Unauthorized />,
       },
 
       // Admin only routes - a/
@@ -42,10 +53,7 @@ const router = createBrowserRouter([
           {
             path: "/a",
             element: <AdminLayout />,
-            children: [
-              { index: true, element: <AdminDashboard /> },
-              //{ path: "dashboard", element: <div>Admin DashBoard</div> },
-            ],
+            children: [{ index: true, element: <AdminDashboard /> }],
           },
         ],
       },
@@ -56,25 +64,18 @@ const router = createBrowserRouter([
           {
             path: "/d",
             element: <DoctorLayout />,
-            children: [
-              { index: true, element: <DoctorDashboard /> },
-              //{ path: "create", element: <CreateCourse /> },
-            ],
+            children: [{ index: true, element: <DoctorDashboard /> }],
           },
         ],
       },
-      // patient only routes - p/
+      // Patient only routes - p/
       {
         element: <ProtectedRoute allowedRoles={["patient"]} />,
         children: [
           {
             path: "/p",
             element: <PatientLayout />,
-            children: [
-              { index: true, element: <PatientDashboard /> },
-              //{ path: "add-report", element: <AddReport /> },
-              //{ path: "dashboard", element: <div>Admin student</div> },
-            ],
+            children: [{ index: true, element: <PatientDashboard /> }],
           },
         ],
       },
@@ -82,11 +83,7 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: (
-      <div className="min-h-screen flex items-center justify-center">
-        404 - Page not found!
-      </div>
-    ),
+    element: <NotFound />,
   },
 ]);
 
